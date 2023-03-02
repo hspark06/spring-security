@@ -7,7 +7,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.security.app.security.service.JpaUserDetailsService;
@@ -21,7 +20,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final JpaUserDetailsService jpaUserDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    //private final SCryptPasswordEncoder sCryptPasswordEncoder;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -30,17 +28,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         CustomUserDetails customUserDetails = jpaUserDetailsService.loadUserByUsername(username);
-
-        switch (customUserDetails.getUser().getAlgorithm()) {
-            case BCRYPT:
-                return checkPassword(customUserDetails, password, bCryptPasswordEncoder);
-            //case SCRYPT:
-            //    return checkPassword(customUserDetails, password, sCryptPasswordEncoder);
-            default:
-                break;
-        }
-
-        throw new BadCredentialsException("Bad credentials");
+        return checkPassword(customUserDetails, password, bCryptPasswordEncoder);
     }
 
     @Override

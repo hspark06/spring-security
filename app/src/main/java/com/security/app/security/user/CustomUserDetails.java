@@ -25,10 +25,18 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getAuthorities().stream()
-                .map(a -> new SimpleGrantedAuthority(a.getName()))
+        return user.getRoles().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toList());
     }
+
+    public Long getId() {
+		return user.getId();
+	}
+
+	public String getEmail() {
+		return user.getEmail();
+	}
 
     @Override
     public String getPassword() {

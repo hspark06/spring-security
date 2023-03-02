@@ -6,5 +6,5 @@ import com.security.app.security.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    Optional<User> findUserByUsername(String username);
+    Optional<User> findByUsername(String username);
 }
